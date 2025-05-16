@@ -1,6 +1,6 @@
- # AWS EC2 Pulumi Template
+ # Pulumi infra
 
- A minimal Pulumi template for provisioning a single AWS EC2 bucket using Python.
+ A minimal Pulumi packages for provisioning a single AWS EC2 bucket using Python.
 
  ## Prerequisites
 
