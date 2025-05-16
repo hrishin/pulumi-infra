@@ -1,0 +1,3 @@
+config:
+  aws:region: eu-west-2
+encryptionsalt: v1:1+Vnx23roas=:v1:NoTLmJZtf8KfR1pj:ax9u98Pq5N+FUSdewPjKrUlCCyCZmA==

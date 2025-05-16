@@ -1,0 +1,11 @@
+name: ec2-package
+description: A EC2 instance spinner
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
