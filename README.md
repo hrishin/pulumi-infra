@@ -12,20 +12,23 @@
  ## Getting Started
 
  1. Setup the local environment:
-    ```bash
+   ```bash
    mkdir -p ~/.pulumi-local-state
    pulumi login file://$HOME/.pulumi-local-state
-    ```
+   ```
+
  2. Follow the prompts to set your project name and AWS region (default: `eu-west-2`).
 
  3. Preview the planned changes:
     ```bash
     pulumi preview
     ```
+ 
  5. Deploy the stack:
     ```bash
     pulumi up
     ```
+ 
  6. Tear down when finished:
     ```bash
     pulumi destroy
