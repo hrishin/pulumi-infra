@@ -20,19 +20,19 @@
  2. Follow the prompts to set your project name and AWS region (default: `eu-west-2`).
 
  3. Preview the planned changes:
-    ```bash
-    pulumi preview
-    ```
+   ```bash
+   pulumi preview
+   ```
  
  5. Deploy the stack:
-    ```bash
-    pulumi up
-    ```
+   ```bash
+   pulumi up
+   ```
  
  6. Tear down when finished:
-    ```bash
-    pulumi destroy
-    ```
+   ```bash
+   pulumi destroy
+   ```
 
  ## Configuration
 
