@@ -1,27 +1,55 @@
 import pulumi_aws as aws
 
 def setup_vpc():
-    vpc = aws.ec2.get_vpc(default=True)
-    subnets = aws.ec2.get_subnets(filters=[{
-        "name": "vpc-id",
-        "values": [vpc.id],
-    }])
+    # Create a new VPC instead of using the default one
+    vpc = aws.ec2.Vpc("main-vpc",
+        cidr_block="10.0.0.0/16",
+        enable_dns_hostnames=True,
+        enable_dns_support=True,
+        tags={
+            "Name": "main-vpc"
+        }
+    )
 
-    route_tables = aws.ec2.get_route_tables(filters=[{
-        "name": "vpc-id",
-        "values": [vpc.id],
-    }])
+    # Create an Internet Gateway
+    internet_gateway = aws.ec2.InternetGateway("main-igw",
+        vpc_id=vpc.id,
+        tags={
+            "Name": "main-internet-gateway"
+        }
+    )
 
-    public_subnet_ids = []
-    for rt_id in route_tables.ids:
-        rt = aws.ec2.get_route_table(route_table_id=rt_id)
-        has_igw = any(r.gateway_id and r.gateway_id.startswith("igw-") for r in rt.routes)
-        if has_igw:
-            for assoc in rt.associations:
-                if assoc.subnet_id:
-                    public_subnet_ids.append(assoc.subnet_id)
+    # Create a public subnet
+    public_subnet = aws.ec2.Subnet("public-subnet",
+        vpc_id=vpc.id,
+        cidr_block="10.0.1.0/24",
+        availability_zone="us-east-1a",  # You can make this configurable
+        map_public_ip_on_launch=True,
+        tags={
+            "Name": "public-subnet"
+        }
+    )
+
+    # Create a route table for public subnets
+    public_route_table = aws.ec2.RouteTable("public-route-table",
+        vpc_id=vpc.id,
+        routes=[{
+            "cidr_block": "0.0.0.0/0",
+            "gateway_id": internet_gateway.id
+        }],
+        tags={
+            "Name": "public-route-table"
+        }
+    )
+
+    # Associate the public subnet with the route table
+    public_route_table_association = aws.ec2.RouteTableAssociation("public-subnet-association",
+        subnet_id=public_subnet.id,
+        route_table_id=public_route_table.id
+    )
 
     return {
         "vpc_id": vpc.id,
-        "public_subnet_id": public_subnet_ids[0] if public_subnet_ids else None
+        "public_subnet_id": public_subnet.id,
+        "internet_gateway_id": internet_gateway.id
     }
